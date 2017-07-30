@@ -66,7 +66,6 @@ void loop() {
 
   /* TODO: Battery Protection
   while (smoothBattery.getValue() > 3 && smoothBattery.getValue() < 11.4) {
-    changeSpeed(currentDirection, speed, 0);
     motor.changeSpeed(0);
     delay(1000);
   }
