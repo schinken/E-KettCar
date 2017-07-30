@@ -8,8 +8,8 @@ class Motor {
   public:
     Motor(uint8_t enableR, uint8_t pwmR, uint8_t enableL, uint8_t pwmL);
 
-    static const uint8_t DIRECTION_FORWARD = 1;
-    static const uint8_t DIRECTION_BACKWARD = 2;
+    static const uint8_t DIRECTION_FORWARDS = 1;
+    static const uint8_t DIRECTION_BACKWARDS = 2;
 
     void setSpeed(uint8_t speed);
     void setDirection(uint8_t direction);

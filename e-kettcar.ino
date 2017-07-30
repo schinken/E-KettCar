@@ -9,7 +9,7 @@
 #include "settings.h"
 
 Motor motor = Motor(PIN_ENABLE_R, PIN_PWM_R, PIN_ENABLE_L, PIN_PWM_L);
-Gear gear = Gear(PIN_SWITCH_FORWARD, PIN_SWITCH_BACKWARD);
+Gear gear = Gear(PIN_SWITCH_FORWARDS, PIN_SWITCH_BACKWARDS);
 GasPedal gas = GasPedal(PIN_GAS_PEDAL, GAS_VALUE_MIN, GAS_VALUE_MAX);
 Battery battery = Battery(PIN_BATTERY_VOLTAGE);
 
@@ -49,9 +49,9 @@ void loop() {
 
   // Different max speed, when driving backwards
   if (motor.isForwards()) {
-    speed = map(smoothGas.getValue(), 0, 255, 0, SPEED_MAX_FORWARD);
+    speed = map(smoothGas.getValue(), 0, 255, 0, SPEED_MAX_FORWARDS);
   } else {
-    speed = map(smoothGas.getValue(), 0, 255, 0, SPEED_MAX_BACKWARD);
+    speed = map(smoothGas.getValue(), 0, 255, 0, SPEED_MAX_BACKWARDS);
   }
 
   Serial.print("Speed: ");

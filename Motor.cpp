@@ -1,7 +1,7 @@
 #include "Motor.h"
 
 Motor::Motor(uint8_t enableR, uint8_t pwmR, uint8_t enableL, uint8_t pwmL) : 
-      enableR(enableR), pwmR(pwmR), enableL(enableL), pwmL(pwmL), speed(0), direction(Motor::DIRECTION_FORWARD) {
+      enableR(enableR), pwmR(pwmR), enableL(enableL), pwmL(pwmL), speed(0), direction(Motor::DIRECTION_FORWARDS) {
   pinMode(enableR, OUTPUT);
   digitalWrite(enableR, LOW);
   
@@ -17,7 +17,7 @@ Motor::Motor(uint8_t enableR, uint8_t pwmR, uint8_t enableL, uint8_t pwmL) :
 
 void Motor::setSpeed(uint8_t speed) {
   
-  if (direction == Motor::DIRECTION_FORWARD) {
+  if (direction == Motor::DIRECTION_FORWARDS) {
     analogWrite(pwmL, 0);
     analogWrite(pwmR, speed);
   } else {
@@ -32,7 +32,7 @@ void Motor::setDirection(uint8_t direction) {
   analogWrite(pwmL, 0);
   analogWrite(pwmR, 0);
 
-  if (direction == Motor::DIRECTION_FORWARD) {
+  if (direction == Motor::DIRECTION_FORWARDS) {
     digitalWrite(enableL, LOW);
     digitalWrite(enableR, HIGH);
   } else {
@@ -66,19 +66,19 @@ void Motor::changeSpeed(uint8_t speed, uint8_t pace) {
 }
 
 void Motor::setForward() {
-  this->setDirection(Motor::DIRECTION_FORWARD);
+  this->setDirection(Motor::DIRECTION_FORWARDS);
 }
 
 void Motor::setBackward() {
-  this->setDirection(Motor::DIRECTION_BACKWARD);
+  this->setDirection(Motor::DIRECTION_BACKWARDS);
 }
 
 bool Motor::isForwards() {
-  return (this->direction == Motor::DIRECTION_FORWARD);
+  return (this->direction == Motor::DIRECTION_FORWARDS);
 }
 
 bool Motor::isBackwards() {
-  return (this->direction == Motor::DIRECTION_BACKWARD);
+  return (this->direction == Motor::DIRECTION_BACKWARDS);
 }
     
 uint8_t Motor::getSpeed() {
