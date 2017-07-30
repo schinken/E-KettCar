@@ -84,6 +84,7 @@ void loop() {
     }
    
   }
-  
+
+  gear.update();
   updateDisplay();
 }
