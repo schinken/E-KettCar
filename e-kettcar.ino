@@ -37,7 +37,7 @@ void setup() {
 void updateDisplay() {
   lcd.setCursor(0, 0);
   lcd.print("Geschw: ");
-  lcd.print(map(motor.getSpeed(), 0, 255, 0, 100));
+  lcd.print(map(smoothGas.getValue(), 0, 255, 0, 100));
   lcd.print("%   ");
 
   lcd.setCursor(0, 1);
