@@ -46,9 +46,6 @@ void loop() {
   uint8_t speed = 0;
   uint8_t currentGas = gas.getValue();
   uint8_t currentBatteryVoltage = battery.getValue();
-  
-  smoothGas.update(currentGas);
-  smoothBattery.update(currentBatteryVoltage);
 
   // Different max speed, when driving backwards
   if (motor.isForwards()) {
@@ -64,7 +61,6 @@ void loop() {
 
 
   /* TODO: Battery Protection
-  batteryVoltage = getBatteryVoltage();
   while (smoothBattery.getValue() > 3 && smoothBattery.getValue() < 11.4) {
     changeSpeed(currentDirection, speed, 0);
     motor.changeSpeed(0);
@@ -86,5 +82,8 @@ void loop() {
   }
 
   gear.update();
+  smoothGas.update(currentGas);
+  smoothBattery.update(currentBatteryVoltage);
+  
   updateDisplay();
 }
