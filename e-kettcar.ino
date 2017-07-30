@@ -23,6 +23,10 @@ void setup() {
   Wire.begin();
   Serial.begin(115200);
 
+  // TODO: Maybe constructor, because it's vital for it's function?
+  battery.setCalibrationValue6V(BATTERY_READING_6V);
+  battery.setCalibrationValue12V(BATTERY_READING_12V);
+
   lcd.begin();
   lcd.clear();
   lcd.backlight();
