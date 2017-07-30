@@ -1,5 +1,8 @@
 #include "ExponentialSmoothing.h"
-      
+
+ExponentialSmoothing::ExponentialSmoothing() : smoothValue(0), alpha(ExponentialSmoothing::DEFAULT_ALPHA) {
+}
+
 ExponentialSmoothing::ExponentialSmoothing(float alpha): smoothValue(0), alpha(alpha) {
 }
   

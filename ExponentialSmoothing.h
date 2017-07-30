@@ -6,6 +6,7 @@
 class ExponentialSmoothing {
 
     public:
+      ExponentialSmoothing();
       ExponentialSmoothing(float alpha);
       ExponentialSmoothing(float initialValue, float alpha);
 
