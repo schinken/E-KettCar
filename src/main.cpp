@@ -11,7 +11,7 @@
 Motor motor = Motor(PIN_ENABLE_R, PIN_PWM_R, PIN_ENABLE_L, PIN_PWM_L);
 Gear gear = Gear(PIN_SWITCH_FORWARDS, PIN_SWITCH_BACKWARDS);
 GasPedal gas = GasPedal(PIN_GAS_PEDAL, GAS_VALUE_MIN, GAS_VALUE_MAX);
-Battery battery = Battery(PIN_BATTERY_VOLTAGE);
+Battery battery = Battery(PIN_BATTERY_VOLTAGE, BATTERY_READING_6V, BATTERY_READING_12V);
 
 ExponentialSmoothing smoothGas = ExponentialSmoothing();
 ExponentialSmoothing smoothBattery = ExponentialSmoothing();
@@ -22,10 +22,6 @@ void setup() {
 
   Wire.begin();
   Serial.begin(115200);
-
-  // TODO: Maybe constructor, because it's vital for it's function?
-  battery.setCalibrationValue6V(BATTERY_READING_6V);
-  battery.setCalibrationValue12V(BATTERY_READING_12V);
 
   lcd.init();
   lcd.clear();

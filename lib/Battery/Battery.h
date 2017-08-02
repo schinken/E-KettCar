@@ -6,13 +6,10 @@
 class Battery {
 
     public:
-      Battery(uint8_t pin);
+      Battery(uint8_t pin, uint16_t calibration6V, uint16_t calibration12V);
 
       float getValue();
       uint16_t getRawValue();
-
-      void setCalibrationValue6V(uint16_t value);
-      void setCalibrationValue12V(uint16_t value);
       
     private:
 
