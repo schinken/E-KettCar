@@ -1,11 +1,11 @@
 #include <Arduino.h>
 #include <LiquidCrystal_I2C.h>
 #include <Wire.h>
-#include "Motor.h"
-#include "Battery.h"
-#include "GasPedal.h"
-#include "Gear.h"
-#include "ExponentialSmoothing.h"
+#include <Motor.h>
+#include <Battery.h>
+#include <GasPedal.h>
+#include <Gear.h>
+#include <ExponentialSmoothing.h>
 #include "settings.h"
 
 Motor motor = Motor(PIN_ENABLE_R, PIN_PWM_R, PIN_ENABLE_L, PIN_PWM_L);
@@ -19,7 +19,7 @@ ExponentialSmoothing smoothBattery = ExponentialSmoothing();
 LiquidCrystal_I2C lcd(0x27, 16, 2);
 
 void setup() {
-  
+
   Wire.begin();
   Serial.begin(115200);
 
@@ -27,10 +27,10 @@ void setup() {
   battery.setCalibrationValue6V(BATTERY_READING_6V);
   battery.setCalibrationValue12V(BATTERY_READING_12V);
 
-  lcd.begin();
+  lcd.init();
   lcd.clear();
   lcd.backlight();
-  
+
   lcd.setCursor(0, 0);
 }
 
@@ -81,12 +81,12 @@ void loop() {
       motor.setDirection(gear.getGear());
       motor.changeSpeed(speed, 10);
     }
-   
+
   }
 
   gear.update();
   smoothGas.update(currentGas);
   smoothBattery.update(currentBatteryVoltage);
-  
+
   updateDisplay();
 }
