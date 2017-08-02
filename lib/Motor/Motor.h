@@ -22,18 +22,18 @@ class Motor {
 
     bool isForwards();
     bool isBackwards();
-    
+
     uint8_t getSpeed();
 
   private:
-    uint8_t direction;
-    uint8_t speed;
-
     uint8_t enableR;
     uint8_t pwmR;
 
     uint8_t enableL;
     uint8_t pwmL;
+
+    uint8_t speed;
+    uint8_t direction;
 };
 
 #endif
