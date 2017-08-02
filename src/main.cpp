@@ -72,7 +72,7 @@ void loop() {
       (gear.isBackwards() && !motor.isBackwards())) {
 
     // Change gear only, if speed is below a configured speed
-    if (speed < SPEED_MIN_DIRECTION_CHANGE) {
+    if (speed < SPEED_MAX_DIRECTION_CHANGE) {
       motor.changeSpeed(0, 10);
       motor.setDirection(gear.getGear());
       motor.changeSpeed(speed, 10);
