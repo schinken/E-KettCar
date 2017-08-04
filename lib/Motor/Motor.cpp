@@ -20,27 +20,39 @@ Motor::Motor(uint8_t enableR, uint8_t pwmR, uint8_t enableL, uint8_t pwmL)
 
 void Motor::setSpeed(uint8_t speed) {
 
-  if (direction == Motor::DIRECTION_FORWARDS) {
-    analogWrite(pwmL, 0);
-    analogWrite(pwmR, speed);
+  uint8_t pinOff = this->pwmR;
+  uint8_t pinOn = this->pwmL;
+
+  if (this->direction == Motor::DIRECTION_FORWARDS) {
+    pinOff = this->pwmL;
+    pinOn = this->pwmR;
+  }
+
+  digitalWrite(pinOff, LOW);
+
+  if (speed >= 254) {
+    digitalWrite(pinOn, HIGH);
+  } else if (speed <= 2) {
+    digitalWrite(pinOn, LOW);
   } else {
-    analogWrite(pwmR, 0);
-    analogWrite(pwmL, speed);
+    analogWrite(pinOn, speed);
   }
 
   this->speed = speed;
 }
 
 void Motor::setDirection(uint8_t direction) {
-  analogWrite(pwmL, 0);
-  analogWrite(pwmR, 0);
+
+  // Speed totally off.
+  digitalWrite(this->pwmL, LOW);
+  digitalWrite(this->pwmR, LOW);
 
   if (direction == Motor::DIRECTION_FORWARDS) {
-    digitalWrite(enableL, LOW);
-    digitalWrite(enableR, HIGH);
+    digitalWrite(this->enableL, LOW);
+    digitalWrite(this->enableR, HIGH);
   } else {
-    digitalWrite(enableR, LOW);
-    digitalWrite(enableL, HIGH);
+    digitalWrite(this->enableR, LOW);
+    digitalWrite(this->enableL, HIGH);
   }
 
   this->direction = direction;
