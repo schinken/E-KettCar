@@ -4,8 +4,8 @@
 #define PIN_ENABLE_R 4
 #define PIN_ENABLE_L 7
 
-#define PIN_PWM_R 10
-#define PIN_PWM_L 9
+#define PIN_PWM_R 5
+#define PIN_PWM_L 6
 
 #define PIN_SWITCH_FORWARDS 12
 #define PIN_SWITCH_BACKWARDS 13
