@@ -10,12 +10,12 @@ class ExponentialSmoothing {
       ExponentialSmoothing(float alpha);
       ExponentialSmoothing(float initialValue, float alpha);
 
-      static const uint8_t DEFAULT_ALPHA = 0.03;
+      const float DEFAULT_ALPHA = 0.03;
 
       float getValue();
 
       void update(float newValue);
-      
+
     private:
       float smoothValue;
       float alpha;
