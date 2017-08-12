@@ -8,13 +8,13 @@
 #include <ExponentialSmoothing.h>
 #include "settings.h"
 
-Motor motor = Motor(PIN_ENABLE_R, PIN_PWM_R, PIN_ENABLE_L, PIN_PWM_L);
-Gear gear = Gear(PIN_SWITCH_FORWARDS, PIN_SWITCH_BACKWARDS);
-GasPedal gas = GasPedal(PIN_GAS_PEDAL, GAS_VALUE_MIN, GAS_VALUE_MAX);
-Battery battery = Battery(PIN_BATTERY_VOLTAGE, BATTERY_READING_6V, BATTERY_READING_12V);
+Motor motor(PIN_ENABLE_R, PIN_PWM_R, PIN_ENABLE_L, PIN_PWM_L);
+Gear gear(PIN_SWITCH_FORWARDS, PIN_SWITCH_BACKWARDS);
+GasPedal gas(PIN_GAS_PEDAL, GAS_VALUE_MIN, GAS_VALUE_MAX);
+Battery battery(PIN_BATTERY_VOLTAGE, BATTERY_READING_6V, BATTERY_READING_12V);
 
-ExponentialSmoothing smoothGas = ExponentialSmoothing();
-ExponentialSmoothing smoothBattery = ExponentialSmoothing();
+ExponentialSmoothing smoothGas;
+ExponentialSmoothing smoothBattery;
 
 LiquidCrystal_I2C lcd(0x27, 16, 2);
 
