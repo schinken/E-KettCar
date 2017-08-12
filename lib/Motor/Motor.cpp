@@ -1,59 +1,33 @@
 #include "Motor.h"
 
-Motor::Motor(uint8_t enableR, uint8_t pwmR, uint8_t enableL, uint8_t pwmL)
-  : enableR(enableR), pwmR(pwmR),
-    enableL(enableL), pwmL(pwmL),
+Motor::Motor(uint8_t pinCW, uint8_t pinCCW)
+  : pinCW(pinCW), pinCCW(pinCCW),
     speed(0), direction(Motor::DIRECTION_FORWARDS) {
 
-  pinMode(enableR, OUTPUT);
-  digitalWrite(enableR, LOW);
+  pinMode(pinCW, OUTPUT);
+  digitalWrite(pinCW, LOW);
 
-  pinMode(pwmR, OUTPUT);
-  analogWrite(pwmR, 0);
-
-  pinMode(enableL, OUTPUT);
-  digitalWrite(enableL, LOW);
-
-  pinMode(pwmL, OUTPUT);
-  analogWrite(pwmL, 0);
+  pinMode(pinCCW, OUTPUT);
+  digitalWrite(pinCCW, LOW);
 }
 
 void Motor::setSpeed(uint8_t speed) {
 
-  uint8_t pinOff = this->pwmR;
-  uint8_t pinOn = this->pwmL;
-
   if (this->direction == Motor::DIRECTION_FORWARDS) {
-    pinOff = this->pwmL;
-    pinOn = this->pwmR;
-  }
-
-  digitalWrite(pinOff, LOW);
-
-  if (speed >= 254) {
-    digitalWrite(pinOn, HIGH);
-  } else if (speed <= 2) {
-    digitalWrite(pinOn, LOW);
+    digitalWrite(this->pinCCW, LOW);
+    analogWrite(this->pinCW, speed);
   } else {
-    analogWrite(pinOn, speed);
+    digitalWrite(this->pinCW, LOW);
+    analogWrite(this->pinCCW, speed);
   }
 
   this->speed = speed;
 }
 
 void Motor::setDirection(uint8_t direction) {
-
   // Speed totally off.
-  digitalWrite(this->pwmL, LOW);
-  digitalWrite(this->pwmR, LOW);
-
-  if (direction == Motor::DIRECTION_FORWARDS) {
-    digitalWrite(this->enableL, LOW);
-    digitalWrite(this->enableR, HIGH);
-  } else {
-    digitalWrite(this->enableR, LOW);
-    digitalWrite(this->enableL, HIGH);
-  }
+  digitalWrite(this->pinCCW, LOW);
+  digitalWrite(this->pinCW, LOW);
 
   this->direction = direction;
 }

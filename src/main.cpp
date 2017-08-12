@@ -8,7 +8,7 @@
 #include <ExponentialSmoothing.h>
 #include "settings.h"
 
-Motor motor(PIN_ENABLE_R, PIN_PWM_R, PIN_ENABLE_L, PIN_PWM_L);
+Motor motor(PIN_CW, PIN_CCW);
 Gear gear(PIN_SWITCH_FORWARDS, PIN_SWITCH_BACKWARDS);
 GasPedal gas(PIN_GAS_PEDAL, GAS_VALUE_MIN, GAS_VALUE_MAX);
 Battery battery(PIN_BATTERY_VOLTAGE, BATTERY_READING_6V, BATTERY_READING_12V);

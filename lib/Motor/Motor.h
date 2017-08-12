@@ -6,7 +6,7 @@
 class Motor {
 
   public:
-    Motor(uint8_t enableR, uint8_t pwmR, uint8_t enableL, uint8_t pwmL);
+    Motor(uint8_t pinCW, uint8_t pinCCW);
 
     static const uint8_t DIRECTION_FORWARDS = 1;
     static const uint8_t DIRECTION_BACKWARDS = 2;
@@ -26,11 +26,8 @@ class Motor {
     uint8_t getSpeed();
 
   private:
-    uint8_t enableR;
-    uint8_t pwmR;
-
-    uint8_t enableL;
-    uint8_t pwmL;
+    uint8_t pinCW;
+    uint8_t pinCCW;
 
     uint8_t speed;
     uint8_t direction;
