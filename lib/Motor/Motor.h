@@ -11,6 +11,7 @@ class Motor {
     static const uint8_t DIRECTION_FORWARDS = 1;
     static const uint8_t DIRECTION_BACKWARDS = 2;
 
+    void begin();
     void setSpeed(uint8_t speed);
     void setDirection(uint8_t direction);
     void setForward();

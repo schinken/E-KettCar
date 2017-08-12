@@ -2,11 +2,8 @@
 #include "Motor.h"
 
 Gear::Gear(uint8_t pinForwards, uint8_t pinBackwards)
-  : gear(Motor::DIRECTION_FORWARDS) {
-    
-  pinMode(pinForwards, INPUT_PULLUP);
-  pinMode(pinBackwards, INPUT_PULLUP);
-
+  : pinForwards(pinForwards), pinBackwards(pinBackwards),
+    gear(Motor::DIRECTION_FORWARDS) {
   this->debounceForwards = new Bounce();
   this->debounceForwards->attach(pinForwards);
   this->debounceForwards->interval(100);
@@ -14,6 +11,11 @@ Gear::Gear(uint8_t pinForwards, uint8_t pinBackwards)
   this->debounceBackwards = new Bounce();
   this->debounceBackwards->attach(pinBackwards);
   this->debounceBackwards->interval(100);
+}
+
+void Gear::begin() {
+  pinMode(this->pinForwards, INPUT_PULLUP);
+  pinMode(this->pinBackwards, INPUT_PULLUP);
 }
 
 void Gear::update() {

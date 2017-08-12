@@ -1,12 +1,14 @@
 #include "GasPedal.h"
 
 GasPedal::GasPedal(uint8_t pin) : pin(pin) {
-  pinMode(pin, INPUT);
 }
 
 GasPedal::GasPedal(uint8_t pin, uint16_t minValue, uint16_t maxValue)
   : pin(pin), minValue(minValue), maxValue(maxValue) {
-  pinMode(pin, INPUT);
+}
+
+void GasPedal::begin() {
+  pinMode(this->pin, INPUT);
 }
 
 uint16_t GasPedal::getRawValue() {

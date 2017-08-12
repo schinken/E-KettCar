@@ -3,12 +3,14 @@
 Motor::Motor(uint8_t pinCW, uint8_t pinCCW)
   : pinCW(pinCW), pinCCW(pinCCW),
     speed(0), direction(Motor::DIRECTION_FORWARDS) {
+}
 
-  pinMode(pinCW, OUTPUT);
-  digitalWrite(pinCW, LOW);
+void Motor::begin() {
+  pinMode(this->pinCW, OUTPUT);
+  digitalWrite(this->pinCW, LOW);
 
-  pinMode(pinCCW, OUTPUT);
-  digitalWrite(pinCCW, LOW);
+  pinMode(this->pinCCW, OUTPUT);
+  digitalWrite(this->pinCCW, LOW);
 }
 
 void Motor::setSpeed(uint8_t speed) {

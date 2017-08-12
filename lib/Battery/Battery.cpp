@@ -2,7 +2,10 @@
 
 Battery::Battery(uint8_t pin, uint16_t calibration6V, uint16_t calibration12V)
   : pin(pin), calibration6V(calibration6V), calibration12V(calibration12V) {
-  pinMode(pin, INPUT);
+}
+
+void Battery::begin() {
+  pinMode(this->pin, INPUT);
 }
 
 uint16_t Battery::getRawValue() {

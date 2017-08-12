@@ -9,12 +9,14 @@ class GasPedal {
       GasPedal(uint8_t pin);
       GasPedal(uint8_t pin, uint16_t minValue, uint16_t maxValue);
 
+      void begin();
+      
       uint8_t getValue();
       uint16_t getRawValue();
 
       void setMinimum(uint16_t value);
       void setMaximum(uint16_t value);
-      
+
     private:
 
       uint8_t pin;

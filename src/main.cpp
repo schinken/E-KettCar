@@ -19,9 +19,13 @@ ExponentialSmoothing smoothBattery;
 LiquidCrystal_I2C lcd(0x27, 16, 2);
 
 void setup() {
-
-  Wire.begin();
   Serial.begin(115200);
+  Wire.begin();
+
+  gas.begin();
+  gear.begin();
+  motor.begin();
+  battery.begin();
 
   lcd.init();
   lcd.clear();

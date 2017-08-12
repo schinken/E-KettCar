@@ -8,9 +8,11 @@ class Battery {
     public:
       Battery(uint8_t pin, uint16_t calibration6V, uint16_t calibration12V);
 
+      void begin();
+      
       float getValue();
       uint16_t getRawValue();
-      
+
     private:
 
       uint8_t pin;

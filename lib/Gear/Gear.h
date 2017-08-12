@@ -9,18 +9,21 @@ class Gear {
     public:
       Gear(uint8_t pinForwards, uint8_t pinBackwards);
 
+      void begin();
       void update();
-      
+
       bool isForwards();
       bool isBackwards();
 
       uint8_t getGear();
-      
+
     private:
 
       Bounce* debounceForwards;
       Bounce* debounceBackwards;
 
+      uint8_t pinForwards;
+      uint8_t pinBackwards;
       uint8_t gear;
 };
 
