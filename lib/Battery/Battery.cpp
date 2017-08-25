@@ -14,7 +14,7 @@ uint16_t Battery::getRawValue() {
 
 float Battery::getValue() {
   uint16_t battery = this->getRawValue();
-  return this->mapfloat(battery, this->calibration6V, this->calibration12V, 0.0, 12.0);
+  return this->mapfloat(battery, this->calibration6V, this->calibration12V, 6.0, 12.0);
 }
 
 float Battery::mapfloat(long x, long in_min, long in_max, long out_min, long out_max) {

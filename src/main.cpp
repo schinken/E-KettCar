@@ -22,6 +22,8 @@ void setup() {
   Serial.begin(115200);
   Wire.begin();
 
+  smoothBattery.setValue(12.0);
+
   gas.begin();
   gear.begin();
   motor.begin();
@@ -47,9 +49,10 @@ void updateDisplay() {
 }
 
 void loop() {
+
   uint8_t speed = 0;
   uint8_t currentGas = gas.getValue();
-  uint8_t currentBatteryVoltage = battery.getValue();
+  float currentBatteryVoltage = battery.getValue();
 
   // Different max speed, when driving backwards
   if (motor.isForwards()) {
@@ -63,6 +66,8 @@ void loop() {
 
   motor.setSpeed(speed);
 
+  Serial.print("Battery: ");
+  Serial.println(smoothBattery.getValue());
 
   /* TODO: Battery Protection
   while (smoothBattery.getValue() > 3 && smoothBattery.getValue() < 11.4) {

@@ -8,11 +8,11 @@ class ExponentialSmoothing {
     public:
       ExponentialSmoothing();
       ExponentialSmoothing(float alpha);
-      ExponentialSmoothing(float initialValue, float alpha);
 
       const float DEFAULT_ALPHA = 0.03;
 
       float getValue();
+      void setValue(float value);
 
       void update(float newValue);
 

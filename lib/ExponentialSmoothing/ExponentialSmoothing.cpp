@@ -8,12 +8,12 @@ ExponentialSmoothing::ExponentialSmoothing(float alpha)
   : smoothValue(0), alpha(alpha) {
 }
 
-ExponentialSmoothing::ExponentialSmoothing(float initialValue, float alpha)
-  : smoothValue(initialValue), alpha(alpha) {
-}
-
 float ExponentialSmoothing::getValue() {
   return this->smoothValue;
+}
+
+void ExponentialSmoothing::setValue(float value) {
+  this->smoothValue = value;
 }
 
 void ExponentialSmoothing::update(float newValue) {
