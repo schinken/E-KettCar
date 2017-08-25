@@ -22,8 +22,6 @@ void setup() {
   Serial.begin(115200);
   Wire.begin();
 
-  smoothBattery.setValue(12.0);
-
   gas.begin();
   gear.begin();
   motor.begin();
@@ -34,6 +32,10 @@ void setup() {
   lcd.backlight();
 
   lcd.setCursor(0, 0);
+
+  delay(100);
+  
+  smoothBattery.setValue(battery.getValue());
 }
 
 void updateDisplay() {
