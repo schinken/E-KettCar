@@ -13,7 +13,7 @@ Gear gear(PIN_SWITCH_FORWARDS, PIN_SWITCH_BACKWARDS);
 GasPedal gas(PIN_GAS_PEDAL, GAS_VALUE_MIN, GAS_VALUE_MAX);
 Battery battery(PIN_BATTERY_VOLTAGE, BATTERY_READING_6V, BATTERY_READING_12V);
 
-ExponentialSmoothing smoothGas(0.1);
+ExponentialSmoothing smoothGas(0.7);
 ExponentialSmoothing smoothBattery;
 
 LiquidCrystal_I2C lcd(0x27, 16, 2);
