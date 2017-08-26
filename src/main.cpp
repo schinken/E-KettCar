@@ -13,10 +13,17 @@ Gear gear(PIN_SWITCH_FORWARDS, PIN_SWITCH_BACKWARDS);
 GasPedal gas(PIN_GAS_PEDAL, GAS_VALUE_MIN, GAS_VALUE_MAX);
 Battery battery(PIN_BATTERY_VOLTAGE, BATTERY_READING_6V, BATTERY_READING_12V);
 
-ExponentialSmoothing smoothGas;
+ExponentialSmoothing smoothGas(0.1);
 ExponentialSmoothing smoothBattery;
 
 LiquidCrystal_I2C lcd(0x27, 16, 2);
+
+void displayWelcome() {
+  lcd.setCursor(3, 0);
+  lcd.print("Tim Huber");
+  lcd.setCursor(0, 1);
+  lcd.print("Model: E-Kettcar");
+}
 
 void setup() {
   Serial.begin(115200);
@@ -33,9 +40,11 @@ void setup() {
 
   lcd.setCursor(0, 0);
 
-  delay(100);
-  
   smoothBattery.setValue(battery.getValue());
+
+  displayWelcome();
+  delay(3000);
+  lcd.clear();
 }
 
 void updateDisplay() {
@@ -43,6 +52,13 @@ void updateDisplay() {
   lcd.print("Geschw: ");
   lcd.print(map(smoothGas.getValue(), 0, 255, 0, 100));
   lcd.print("%   ");
+
+  lcd.setCursor(15, 0);
+  if (gear.isForwards()) {
+    lcd.print("V");
+  } else {
+    lcd.print("R");
+  }
 
   lcd.setCursor(0, 1);
   lcd.print("Bat: ");
@@ -63,12 +79,12 @@ void loop() {
     speed = map(smoothGas.getValue(), 0, 255, 0, SPEED_MAX_BACKWARDS);
   }
 
-  Serial.print("Speed: ");
+  Serial.print("S: ");
   Serial.println(speed);
 
   motor.setSpeed(speed);
 
-  Serial.print("Battery: ");
+  Serial.print("B: ");
   Serial.println(smoothBattery.getValue());
 
   /* TODO: Battery Protection
