@@ -1,14 +1,14 @@
 #define PIN_GAS_PEDAL A0
 #define PIN_BATTERY_VOLTAGE A1
 
-#define PIN_CW 5
-#define PIN_CCW 6
+#define PIN_CW 6
+#define PIN_CCW 5
 
 #define PIN_SWITCH_FORWARDS 10
 #define PIN_SWITCH_BACKWARDS 11
 
 #define GAS_VALUE_MIN 446
-#define GAS_VALUE_MAX 510
+#define GAS_VALUE_MAX 490 //510
 
 #define BATTERY_READING_12V 670
 #define BATTERY_READING_6V 331
