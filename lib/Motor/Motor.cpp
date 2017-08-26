@@ -17,10 +17,20 @@ void Motor::setSpeed(uint8_t speed) {
 
   if (this->direction == Motor::DIRECTION_FORWARDS) {
     digitalWrite(this->pinCCW, LOW);
-    analogWrite(this->pinCW, speed);
+
+    if (speed < 3) {
+      digitalWrite(this->pinCW, LOW);
+    } else {
+      analogWrite(this->pinCW, speed);
+    }
   } else {
     digitalWrite(this->pinCW, LOW);
-    analogWrite(this->pinCCW, speed);
+
+    if (speed < 3) {
+      digitalWrite(this->pinCCW, LOW);
+    } else {
+      analogWrite(this->pinCCW, speed);
+    }
   }
 
   this->speed = speed;
