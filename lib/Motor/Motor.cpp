@@ -15,22 +15,24 @@ void Motor::begin() {
 
 void Motor::setSpeed(uint8_t speed) {
 
+  uint8_t active = this->pinCCW;
+  uint8_t inactive = this->pinCW;
+
   if (this->direction == Motor::DIRECTION_FORWARDS) {
-    digitalWrite(this->pinCCW, LOW);
+    active = this->pinCW;
+    inactive = this->pinCCW;
+  }
 
-    if (speed < 3) {
-      digitalWrite(this->pinCW, LOW);
-    } else {
-      analogWrite(this->pinCW, speed);
-    }
+  // Make sure there's absolutely no signal on there
+  // opposite direction pin
+  digitalWrite(inactive, LOW);
+
+  if (speed < 3) {
+    digitalWrite(active, LOW);
+  } else if (speed > 250) {
+    digitalWrite(active, HIGH);
   } else {
-    digitalWrite(this->pinCW, LOW);
-
-    if (speed < 3) {
-      digitalWrite(this->pinCCW, LOW);
-    } else {
-      analogWrite(this->pinCCW, speed);
-    }
+    analogWrite(active, speed);
   }
 
   this->speed = speed;
