@@ -18,6 +18,12 @@ ExponentialSmoothing smoothBattery;
 
 LiquidCrystal_I2C lcd(0x27, 16, 2);
 
+void displayLowBattery() {
+  lcd.clear();
+  lcd.setCursor(0,0);
+  lcd.print("Batterie leer!");
+}
+
 void displayWelcome() {
   lcd.setCursor(3, 0);
   lcd.print("Tim Huber");
@@ -47,7 +53,7 @@ void setup() {
   lcd.clear();
 }
 
-void updateDisplay() {
+void displayOperational() {
   lcd.setCursor(0, 0);
   lcd.print("Geschw: ");
   lcd.print(map(smoothGas.getValue(), 0, 255, 0, 100));
@@ -87,12 +93,12 @@ void loop() {
   Serial.print("B: ");
   Serial.println(smoothBattery.getValue());
 
-  /* TODO: Battery Protection
-  while (smoothBattery.getValue() > 3 && smoothBattery.getValue() < 11.4) {
-    motor.changeSpeed(0);
-    delay(1000);
+
+  while (smoothBattery.getValue() > 3 && smoothBattery.getValue() < 11.2) {
+    motor.setSpeed(0);
+    displayLowBattery();
+    delay(4000);
   }
-  */
 
   // Does the gear doesn't match with the motor gear?
   if ((gear.isForwards() && !motor.isForwards()) ||
@@ -111,5 +117,5 @@ void loop() {
   smoothGas.update(currentGas);
   smoothBattery.update(currentBatteryVoltage);
 
-  updateDisplay();
+  displayOperational();
 }
