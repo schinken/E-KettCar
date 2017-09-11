@@ -6,6 +6,7 @@
 #include <GasPedal.h>
 #include <Gear.h>
 #include <ExponentialSmoothing.h>
+#include <SimpleTimer.h>
 #include "settings.h"
 
 Motor motor(PIN_CW, PIN_CCW);
@@ -15,45 +16,44 @@ Battery battery(PIN_BATTERY_VOLTAGE, BATTERY_READING_6V, BATTERY_READING_12V);
 
 ExponentialSmoothing smoothGas(0.7);
 ExponentialSmoothing smoothBattery;
+ExponentialSmoothing ultraSmoothBattery(0.03);
+
+bool toggle = false;
+bool isBatteryProtectionMode = false;
+
+SimpleTimer timer;
 
 LiquidCrystal_I2C lcd(0x27, 16, 2);
 
 void displayLowBattery() {
   lcd.clear();
-  lcd.setCursor(0,0);
-  lcd.print("Batterie leer!");
+  lcd.setCursor(0, 0);
+  lcd.print(" Batterie leer! ");
+
+  lcd.setCursor(0, 1);
+  lcd.print("-Bitte aufladen-");
+}
+
+void displayVeryLowBattery() {
+  lcd.clear();
+  lcd.setCursor(0, 0);
+  lcd.print(" Tiefendladungs-");
+
+  lcd.setCursor(0, 1);
+  lcd.print(" Schutz!        ");
 }
 
 void displayWelcome() {
   lcd.setCursor(3, 0);
   lcd.print("Tim Huber");
+
   lcd.setCursor(0, 1);
   lcd.print("Model: E-Kettcar");
 }
 
-void setup() {
-  Serial.begin(115200);
-  Wire.begin();
-
-  gas.begin();
-  gear.begin();
-  motor.begin();
-  battery.begin();
-
-  lcd.init();
-  lcd.clear();
-  lcd.backlight();
-
-  lcd.setCursor(0, 0);
-
-  smoothBattery.setValue(battery.getValue());
-
-  displayWelcome();
-  delay(3000);
-  lcd.clear();
-}
-
 void displayOperational() {
+  lcd.clear();
+
   lcd.setCursor(0, 0);
   lcd.print("Geschw: ");
   lcd.print(map(smoothGas.getValue(), 0, 255, 0, 100));
@@ -72,6 +72,50 @@ void displayOperational() {
   lcd.print("V   ");
 }
 
+void toggleInterval() {
+  toggle = !toggle;
+}
+
+void updateDisplayInterval() {
+  if (isBatteryProtectionMode) {
+    if (toggle) {
+      displayLowBattery();
+    } else {
+      displayOperational();
+    }
+
+    return;
+  }
+
+  displayOperational();
+}
+
+void setup() {
+  Serial.begin(115200);
+  Wire.begin();
+
+  gas.begin();
+  gear.begin();
+  motor.begin();
+  battery.begin();
+
+  lcd.init();
+  lcd.clear();
+  lcd.backlight();
+
+  lcd.setCursor(0, 0);
+
+  smoothBattery.setValue(battery.getValue());
+  ultraSmoothBattery.setValue(battery.getValue());
+
+  displayWelcome();
+  delay(1300);
+  lcd.clear();
+
+  timer.setInterval(1000, toggleInterval);
+  timer.setInterval(100,  updateDisplayInterval);
+}
+
 void loop() {
 
   uint8_t speed = 0;
@@ -79,7 +123,9 @@ void loop() {
   float currentBatteryVoltage = battery.getValue();
 
   // Different max speed, when driving backwards
-  if (motor.isForwards()) {
+  if (isBatteryProtectionMode) {
+    speed = map(smoothGas.getValue(), 0, 255, 0, SPEED_MAX_BATTERY_PROTECTION);
+  } else if (motor.isForwards()) {
     speed = map(smoothGas.getValue(), 0, 255, 0, SPEED_MAX_FORWARDS);
   } else {
     speed = map(smoothGas.getValue(), 0, 255, 0, SPEED_MAX_BACKWARDS);
@@ -93,11 +139,19 @@ void loop() {
   Serial.print("B: ");
   Serial.println(smoothBattery.getValue());
 
+  // Battery protection!
+  if (ultraSmoothBattery.getValue() < 11.6) {
+    isBatteryProtectionMode = true;
+  } else if (ultraSmoothBattery.getValue() > 13.0) {
+    isBatteryProtectionMode = false;
+  } else {
 
-  while (smoothBattery.getValue() > 3 && smoothBattery.getValue() < 11.2) {
-    motor.setSpeed(0);
-    displayLowBattery();
-    delay(4000);
+    // Now we really, really need to protect this battery!
+    while (ultraSmoothBattery.getValue() < 10.6) {
+      motor.setSpeed(0);
+      displayVeryLowBattery();
+      delay(5000);
+    }
   }
 
   // Does the gear doesn't match with the motor gear?
@@ -110,12 +164,12 @@ void loop() {
       motor.setDirection(gear.getGear());
       motor.changeSpeed(speed, SPEED_CHANGE_PACE_DEFAULT);
     }
-
   }
 
   gear.update();
   smoothGas.update(currentGas);
   smoothBattery.update(currentBatteryVoltage);
+  ultraSmoothBattery.update(currentBatteryVoltage);
 
-  displayOperational();
+  timer.run();
 }
