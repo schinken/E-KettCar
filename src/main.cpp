@@ -8,7 +8,10 @@
 #include <Gear.h>
 #include <ExponentialSmoothing.h>
 #include <SimpleTimer.h>
+#include <Display.h>
 #include "settings.h"
+
+LiquidCrystal_I2C lcd(0x27, 16, 2);
 
 Motor motor(PIN_CW, PIN_CCW);
 Gear gear(PIN_SWITCH_FORWARDS, PIN_SWITCH_BACKWARDS);
@@ -16,60 +19,13 @@ GasPedal gas(PIN_GAS_PEDAL, GAS_VALUE_MIN, GAS_VALUE_MAX);
 Battery battery(PIN_BATTERY_VOLTAGE, BATTERY_READING_6V, BATTERY_READING_12V);
 
 BatteryProtection batteryProtection(&battery);
+Display display(&lcd);
 
 ExponentialSmoothing smoothGas(0.7);
 ExponentialSmoothing smoothBattery;
 
 bool toggle = false;
-
-uint8_t batteryState = 0;
-
 SimpleTimer timer;
-
-LiquidCrystal_I2C lcd(0x27, 16, 2);
-
-void displayLowBattery() {
-  lcd.setCursor(0, 0);
-  lcd.print(" Batterie leer! ");
-
-  lcd.setCursor(0, 1);
-  lcd.print("-Bitte aufladen-");
-}
-
-void displayVeryLowBattery() {
-  lcd.setCursor(0, 0);
-  lcd.print(" Tiefendladungs-");
-
-  lcd.setCursor(0, 1);
-  lcd.print(" Schutz!        ");
-}
-
-void displayWelcome() {
-  lcd.setCursor(3, 0);
-  lcd.print("Tim Huber");
-
-  lcd.setCursor(0, 1);
-  lcd.print("Model: E-Kettcar");
-}
-
-void displayOperational() {
-  lcd.setCursor(0, 0);
-  lcd.print("Geschw: ");
-  lcd.print(map(smoothGas.getValue(), 0, 255, 0, 100));
-  lcd.print("%       ");
-
-  lcd.setCursor(15, 0);
-  if (gear.isForwards()) {
-    lcd.print("V");
-  } else {
-    lcd.print("R");
-  }
-
-  lcd.setCursor(0, 1);
-  lcd.print("Bat: ");
-  lcd.print(smoothBattery.getValue());
-  lcd.print("V          ");
-}
 
 void toggleInterval() {
   toggle = !toggle;
@@ -78,15 +34,15 @@ void toggleInterval() {
 void updateDisplayInterval() {
   if (batteryProtection.isLowPower()) {
     if (toggle) {
-      displayLowBattery();
+      display.lowBattery();
     } else {
-      displayOperational();
+      display.normalOperation(&gear, smoothGas.getValue(), smoothBattery.getValue());
     }
 
     return;
   }
 
-  displayOperational();
+  display.normalOperation(&gear, smoothGas.getValue(), smoothBattery.getValue());
 }
 
 void setup() {
@@ -97,16 +53,10 @@ void setup() {
   gear.begin();
   motor.begin();
   battery.begin();
+  display.begin();
 
-  lcd.init();
-  lcd.clear();
-  lcd.backlight();
-
-  lcd.setCursor(0, 0);
-
-  displayWelcome();
+  display.welcome();
   delay(1300);
-  lcd.clear();
 
   smoothBattery.setValue(battery.getValue());
 
@@ -122,7 +72,7 @@ void loop() {
 
   while(batteryProtection.isBatteryProtection()) {
     motor.setSpeed(0);
-    displayVeryLowBattery();
+    display.batteryProtection();
 
     batteryProtection.update();
     delay(500);
